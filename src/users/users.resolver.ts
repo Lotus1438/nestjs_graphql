@@ -1,7 +1,5 @@
-import { UnsupportedMediaTypeException } from '@nestjs/common';
 import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
-import { CreateUserInput } from './dto/create-user-input';
-import { UpdateUserInput } from './dto/update-user-input';
+import { UserDto } from './dto/user.dto';
 import { User } from './user.entity';
 import { UsersService } from './users.service';
 
@@ -20,19 +18,19 @@ export class UsersResolver {
     }
 
     @Mutation(returns => User)
-    async createUser(@Args('createUserInput') createUserInput: CreateUserInput): Promise<User>{
+    async createUser(@Args('createUserInput') createUserInput: UserDto): Promise<User>{
         return this.usersService.createUser(createUserInput);
     }
 
     @Mutation(returns => User)
     async updateUser(
         @Args('id', {type: () => Int}) id: number,
-        @Args('updateUserInput') updateUserInput: UpdateUserInput): Promise<User>{
+        @Args('updateUserInput') updateUserInput: UserDto): Promise<User>{
         return this.usersService.update(id, updateUserInput)
     }
 
-    @Mutation(returns => User)
-    async deleteUser(@Args('id', {type: ()=> Int}) id: number): Promise<User>{
+    @Mutation(returns => Boolean)
+    async deleteUser(@Args('id', {type: ()=> Int}) id: number): Promise<Boolean>{
         return this.usersService.remove(id)
 
     }

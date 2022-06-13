@@ -1,6 +1,6 @@
 import { Field, Int, ObjectType } from "@nestjs/graphql";
-import { Interface } from "readline";
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Message } from "src/messages/entities/message.entity";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 @ObjectType()
@@ -17,28 +17,27 @@ export class User {
     @Field()
     last_name: string;
 
-    // @Column()
-    // @Field(type => Int)
-    // contact_number: number;
+    @Column({nullable: true})
+    @Field({ nullable: true })
+    contact_number?: number;
 
-    // @Column({nullable: true})
-    // @Field({nullable: true})
-    // address?:string;
+    @Column({nullable: true})
+    @Field({nullable: true})
+    address?:string;
 
-    // @Column({nullable: true})
-    // @Field({nullable: true})
-    // birthdate?:string;
+    @Column({nullable: true})
+    @Field({nullable: true})
+    birthdate?:string;
 
-    // @Column()
-    // @Field()
-    // email:string;
+    @Column()
+    @Field()
+    email:string;
 
-    // @Column()
-    // @Field()
-    // password:string;
-}
+    @Column()
+    @Field()
+    password:string;
 
-export interface UserDto{
-    success: boolean;
-    message: string;
+    @OneToMany(() => Message, message => message.user)
+    @Field(type => [Message], {nullable: true})
+    messages?: Message[]
 }

@@ -2,30 +2,59 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type Message {
+  id: Int!
+  recipient: String!
+  subject: String!
+  message: String!
+  sender: String!
+  user_id: Int!
+  user: User!
+}
+
 type User {
   id: Int!
   first_name: String!
   last_name: String!
+  contact_number: Float
+  address: String
+  birthdate: String
+  email: String!
+  password: String!
+  messages: [Message!]
 }
 
 type Query {
   getUser(id: Int!): User!
   users: [User!]!
+  messages: [Message!]!
+  getMessage(id: Int!): Message!
 }
 
 type Mutation {
-  createUser(createUserInput: CreateUserInput!): User!
-  updateUser(id: Int!, updateUserInput: UpdateUserInput!): User!
-  deleteUser(id: Int!): User!
+  createUser(createUserInput: UserDto!): User!
+  updateUser(id: Int!, updateUserInput: UserDto!): User!
+  deleteUser(id: Int!): Boolean!
+  createMessage(createMessageInput: MessageDto!): Message!
+  updateMessage(id: Int!, updateMessageInput: MessageDto!): Message!
+  deleteMessage(id: Int!): Boolean!
 }
 
-input CreateUserInput {
+input UserDto {
+  user_id: Int!
   first_name: String!
   last_name: String!
+  contact_number: Float
+  address: String
+  birthdate: String
+  email: String!
+  password: String!
 }
 
-input UpdateUserInput {
-  id: Int!
-  first_name: String!
-  last_name: String!
+input MessageDto {
+  recipient: String!
+  subject: String!
+  message: String!
+  sender: String!
+  user_id: Int!
 }
