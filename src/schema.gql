@@ -2,59 +2,78 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type Login {
+  email: String!
+  id: Int!
+  password: String!
+}
+
+type LoginResponse {
+  access_token: String!
+  login: Login!
+}
+
+input LoginUserInput {
+  email: String!
+  password: String!
+}
+
 type Message {
   id: Int!
-  recipient: String!
-  subject: String!
   message: String!
+  recipient: String!
   sender: String!
-  user_id: Int!
+  subject: String!
   user: User!
-}
-
-type User {
-  id: Int!
-  first_name: String!
-  last_name: String!
-  contact_number: Float
-  address: String
-  birthdate: String
-  email: String!
-  password: String!
-  messages: [Message!]
-}
-
-type Query {
-  getUser(id: Int!): User!
-  users: [User!]!
-  messages: [Message!]!
-  getMessage(id: Int!): Message!
-}
-
-type Mutation {
-  createUser(createUserInput: UserDto!): User!
-  updateUser(id: Int!, updateUserInput: UserDto!): User!
-  deleteUser(id: Int!): Boolean!
-  createMessage(createMessageInput: MessageDto!): Message!
-  updateMessage(id: Int!, updateMessageInput: MessageDto!): Message!
-  deleteMessage(id: Int!): Boolean!
-}
-
-input UserDto {
   user_id: Int!
-  first_name: String!
-  last_name: String!
-  contact_number: Float
-  address: String
-  birthdate: String
-  email: String!
-  password: String!
 }
 
 input MessageDto {
-  recipient: String!
-  subject: String!
   message: String!
+  recipient: String!
   sender: String!
+  subject: String!
+  user_id: Int!
+}
+
+type Mutation {
+  createMessage(createMessageInput: MessageDto!): Message!
+  createUser(createUserInput: UserDto!): User!
+  deleteMessage(id: Int!): Boolean!
+  deleteUser(id: Int!): Boolean!
+  login(loginUserInput: LoginUserInput!): LoginResponse!
+  signup(loginUserInput: LoginUserInput!): Login!
+  updateMessage(id: Int!, updateMessageInput: MessageDto!): Message!
+  updateUser(id: Int!, updateUserInput: UserDto!): User!
+}
+
+type Query {
+  getMessage(id: Int!): Message!
+  getUser(id: Int!): User!
+  login(email: String!): Login!
+  messages: [Message!]!
+  users: [User!]!
+}
+
+type User {
+  address: String
+  birthdate: String
+  contact_number: Float
+  email: String!
+  first_name: String!
+  id: Int!
+  last_name: String!
+  messages: [Message!]
+  password: String!
+}
+
+input UserDto {
+  address: String
+  birthdate: String
+  contact_number: Float
+  email: String!
+  first_name: String!
+  last_name: String!
+  password: String!
   user_id: Int!
 }

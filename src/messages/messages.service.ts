@@ -1,5 +1,6 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { MyLogger } from 'src/my-logger/my-logger.service';
 import { User } from 'src/users/user.entity';
 import { UsersService } from 'src/users/users.service';
 import { Repository } from 'typeorm';
@@ -8,14 +9,19 @@ import { Message } from './entities/message.entity';
 
 @Injectable()
 export class MessagesService {
-  constructor(@InjectRepository(Message) 
-  private messagesRepository: Repository<Message>,
-  @Inject(forwardRef(() => UsersService))
-  private usersService: UsersService){}
+  constructor(
+    private mylogger: MyLogger,
+    @InjectRepository(Message)
+    private messagesRepository: Repository<Message>,
+    @Inject(forwardRef(() => UsersService))
+    private usersService: UsersService,
+  ) {
+    this.mylogger.setContext('MessagesService')
+  }
 
   async createMessage(createMessageInput: MessageDto): Promise<Message> {
-    const newMessage = await this.messagesRepository.create(createMessageInput)
-    return this.messagesRepository.save(newMessage)
+    const newMessage = await this.messagesRepository.create(createMessageInput);
+    return this.messagesRepository.save(newMessage);
   }
 
   async findAll(): Promise<Message[]> {
@@ -23,27 +29,27 @@ export class MessagesService {
   }
 
   async findOne(id: number): Promise<Message> {
-    const message = await this.messagesRepository.findOne({where: {id}})
-    if (!message) throw new Error("Message does not exist!")
-    return message
+    const message = await this.messagesRepository.findOne({ where: { id } });
+    if (!message) throw this.mylogger.warn("Message does not exit!");
+    return message;
   }
 
   async update(id: number, updateMessageInput: MessageDto) {
-    const message = await this.messagesRepository.findOne({where: {id}})
-    if (!message) throw new Error("Message does not exist!")
-    Object.assign(message, updateMessageInput)
-    await this.messagesRepository.save(message)
-    return message
+    const message = await this.messagesRepository.findOne({ where: { id } });
+    if (!message) throw this.mylogger.warn("Message does not exit!");
+    Object.assign(message, updateMessageInput);
+    await this.messagesRepository.save(message);
+    return message;
   }
 
   async remove(id: number): Promise<Boolean> {
-    const message = await this.messagesRepository.findOne({where: {id}})
-    if (!message) throw new Error("Message does not exist!")
-    await this.messagesRepository.remove(message)
-    return true
+    const message = await this.messagesRepository.findOne({ where: { id } });
+    if (!message) throw this.mylogger.warn("Message does not exit!");
+    await this.messagesRepository.remove(message);
+    return true;
   }
 
-  async getUser(user_id: number): Promise<User>{
-    return this.usersService.findOne(user_id)
+  async getUser(user_id: number): Promise<User> {
+    return this.usersService.findOne(user_id);
   }
 }
